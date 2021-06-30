@@ -36,6 +36,8 @@ About time limit, score limit, and normal.
 Version 0.2:
 -
 
+-Player health upgrade to 5.
+
 -New bullets.
 
 -Change 1 player palette to scroll.
