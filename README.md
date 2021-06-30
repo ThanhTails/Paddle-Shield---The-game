@@ -1,4 +1,5 @@
-PADDLE SHIELD - The game (v0.1)
+PADDLE SHIELD - The game
+
 
 -The game that you control the paddle to block the bullet from the sky into.
 
