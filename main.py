@@ -1,6 +1,6 @@
 from tkinter import*
 import single
-import pl1vs1,p1vs1_score,pl1vs1_timer,pl2vs2,p2vs2_score,p2vs2_time
+import pl1vs1,p1vs1_score,pl1vs1_timer,pl2vs2,p2vs2_score,p2vs2_time,multi
 #window
 def main_menu():
   global win
@@ -13,6 +13,8 @@ def main_menu():
   a.grid(row=1,column=0)
   b=Button(win,text="2 player vs 2 player (4 player)",font=("Arial",20,"normal"),bg="red",command=open_2_player)
   b.grid(row=2,column=0)
+  d=Button(win,text="2 player",font=("Arial",20,"normal"),bg="red",command=open_multiplayer)
+  d.grid(row=4,column=0)
   c=Button(win,text="Quit",font=("Arial",20,"normal"),bg="red",command=close)
   c.grid(row=8,column=0)
   #another
@@ -63,4 +65,6 @@ def close():
   win.destroy()
 def open_2_vs_2():
   pl2vs2.arena_2_vs_2()
+def open_multiplayer():
+  multi.main_window()
 main_menu()

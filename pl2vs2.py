@@ -57,9 +57,9 @@ class team1():
       self.y2=460
 class team2():
   def __init__(self):
-    self.x=660
+    self.x=680
     self.y=250
-    self.x2=660
+    self.x2=680
     self.y2=450
     self.up=False
     self.down=False
@@ -109,18 +109,21 @@ class bounce_op():
     self.down=True
     self.up2=False
     self.down2=True
+    self.count=0
+    self.count2=0
   def draw_bouncy(self):
     draw.rect(main,yellow,(self.x,self.y,20,20))
-    draw.rect(main,yellow,(self.x2,self.y2,20,20))
     if self.up:
       self.y-=2
     if self.down:
       self.y+=2
+    
+  def draw_bouncy2(self):
+    draw.rect(main,yellow,(self.x2,self.y2,20,20))
     if self.up2:
       self.y2-=2
     if self.down2:
       self.y2+=2
-
 def arena_2_vs_2():
   players1=team1()
   players2=team2()
@@ -136,14 +139,14 @@ def arena_2_vs_2():
         done=True
       #keyboard
       if e.type==KEYDOWN:
-        if e.key==K_UP:
+        if e.key==K_j:
           if players2.down:
             players2.stay=True
             players2.down=False
           else:
             players2.up=True
             players2.stay=False
-        if e.key==K_DOWN:
+        if e.key==K_m:
           if players2.up:
             players2.stay=True
             players2.up=False
@@ -204,71 +207,86 @@ def arena_2_vs_2():
     players2.draw_p1_team2()
     players2.draw_p2_team2()
     op.draw_bull()
-    bouncy_bullet.draw_bouncy()
+    if bouncy_bullet.count>=5:
+      bouncy_bullet.draw_bouncy()
+      bouncy_bullet.x-=1
+    if bouncy_bullet.count2>=5:
+      bouncy_bullet.draw_bouncy()
+      bouncy_bullet.x2+=1
     op.x-=2
     op.x2+=2
-    bouncy_bullet.x-=1
-    bouncy_bullet.x2+=1
+    
+    
     #checking crashed
     if op.x<=0:
       op.x=340
       op.y=randrange(2,490,2)
       players1.life-=1
-
+      bouncy_bullet.count+=1
     if op.x2>=700:
       op.x2=360
       op.y2=randrange(2,490,2)
       players2.life-=1
-
+      bouncy_bullet.count2+=1
     if op.y<=players1.y+40 and op.y>=players1.y:
       if op.x<=players1.x:
         op.x=340
         op.y=randrange(2,490,2)
         players1.point+=1
+        bouncy_bullet.count+=1
     if op.y<=players1.y2+40 and op.y>=players1.y2:
       if op.x<=players1.x:
         op.x=340
         op.y=randrange(2,490,2)
         players1.point+=1
+        bouncy_bullet.count+=1
     if op.y2<=players2.y+40 and op.y2>=players2.y:
       if op.x2>=players2.x:
         op.x2=340
         op.y2=randrange(2,490,2)
         players2.point+=1
+        bouncy_bullet.count2+=1
     if op.y2<=players2.y2+40 and op.y2>=players2.y2:
       if op.x2>=players2.x:
         op.x2=340
         op.y2=randrange(2,490,2)
         players2.point+=1
+        bouncy_bullet.count2+=1
     #bouncy dude
     if bouncy_bullet.x<=0:
       bouncy_bullet.x=340
       bouncy_bullet.y=randrange(10,484,4)
       players1.life-=1
+      bouncy_bullet.count=0
     if bouncy_bullet.x2>=700:
       bouncy_bullet.x2=360
       bouncy_bullet.y2=randrange(10,484,4)
       players2.life-=1
+      bouncy_bullet.count2=0
     if bouncy_bullet.y<=players1.y+40 and bouncy_bullet.y>=players1.y:
       if bouncy_bullet.x<=players1.x:
         bouncy_bullet.x=340
         bouncy_bullet.y=randrange(2,490,2)
         players1.point+=1
+        bouncy_bullet.count=0
     if bouncy_bullet.y2<=players2.y+40 and bouncy_bullet.y2>=players2.y:
       if bouncy_bullet.x2>=players2.x:
         bouncy_bullet.x2=340
         bouncy_bullet.y2=randrange(2,490,2)
         players2.point+=1
+        bouncy_bullet.count=0
     if bouncy_bullet.y<=players1.y2+40 and bouncy_bullet.y>=players1.y2:
       if bouncy_bullet.x<=players1.x:
         bouncy_bullet.x=340
         bouncy_bullet.y=randrange(2,490,2)
         players1.point+=1
+        bouncy_bullet.count2=0
     if bouncy_bullet.y2<=players2.y2+40 and bouncy_bullet.y2>=players2.y2:
       if bouncy_bullet.x2>=players2.x:
         bouncy_bullet.x2=340
         bouncy_bullet.y2=randrange(2,490,2)
         players2.point+=1
+        bouncy_bullet.count2=0
 
     #when ?
     if bouncy_bullet.y<=0:

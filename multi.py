@@ -15,21 +15,28 @@ green=(0,255,0)
 yellow=(255,255,0)
 black=(0,0,0)
 blue=(0,0,255)
-
-
+orange=(255,140,0)
+white=(255,255,255)
 class player():
   def __init__(self):
     self.x=width-680
     self.y=250
+    self.x2=width-680
+    self.y2=300
     self.point=0
     self.y_top=self.y-10
     self.hp=5
     self.up=False
     self.down=False
     self.stay=True
+    self.up2=False
+    self.down2=False
+    self.stay2=True
+    self.point2=0
   def draw_player(self):
     draw.rect(main,red,(self.x,self.y,20,40))
-    if self.y<=0:
+    draw.rect(main,orange,(self.x2,self.y2,20,40))
+    if self.y<=0:#for player 1
       self.y=0
     if self.y>=500:
       self.y=500
@@ -37,6 +44,14 @@ class player():
       self.y-=4
     if self.down:
       self.y+=4
+    if self.y2<=0:#for player 2
+      self.y2=0
+    if self.y2>=500:
+      self.y2=500
+    if self.up2:
+      self.y2-=4
+    if self.down2:
+      self.y2+=4
 class opponent():
   def __init__(self):
     self.y=randrange(10,480,4)
@@ -54,8 +69,8 @@ class bounce_op():
     self.y=randrange(10,484,4)
     self.up=False
     self.down=True
-    self.speed=0.5
     self.count_appear=0
+    self.speed=0.5
   def draw_bouncy(self):
     draw.rect(main,yellow,(self.x,self.y,20,20))
     if self.up:
@@ -76,20 +91,35 @@ def main_window():#window
       if e.type==QUIT:
         done=True
       if e.type==KEYDOWN:
-        if e.key==K_UP or e.key==K_w:
+        if e.key==K_i:
           if players.down:
             players.down=False
             players.stay=True
           else:
             players.up=True
             players.stay=False
-        if e.key==K_DOWN or e.key==K_s:
+        if e.key==K_k:
           if players.up:
             players.up=False
             players.stay=True
           else:
             players.stay=False
             players.down=True
+        #for player 2
+        if e.key==K_w:
+          if players.down2:
+            players.down2=False
+            players.stay2=True
+          else:
+            players.up2=True
+            players.stay2=False
+        if e.key==K_s:
+          if players.up2:
+            players.up2=False
+            players.stay2=True
+          else:
+            players.stay2=False
+            players.down2=True
         if e.key==K_q:
           quit()
     if op.y>=players.y and op.y<=players.y+40:
@@ -98,13 +128,26 @@ def main_window():#window
         op.x=width
         players.point+=1
         op.speed+=0.1
-        bouncing_bullet.count_appear+=1
+        bouncing_bullet.speed+=0.1
     if bouncing_bullet.y>=players.y and bouncing_bullet.y<=players.y+40:
       if bouncing_bullet.x<=players.x:
         bouncing_bullet.y=randrange(10,480,4)
         bouncing_bullet.x=width
         players.point+=2
+        bouncing_bullet.count_appear=0
+    #for player 2
+    if op.y>=players.y2 and op.y<=players.y2+40:
+      if op.x<=players.x2:
+        op.y=randrange(10,480,4)
+        op.x=width
+        players.point2+=1
+        op.speed+=0.1
         bouncing_bullet.speed+=0.1
+    if bouncing_bullet.y>=players.y and bouncing_bullet.y<=players.y+40:
+      if bouncing_bullet.x<=players.x:
+        bouncing_bullet.y=randrange(10,480,4)
+        bouncing_bullet.x=width
+        players.point+=2
         bouncing_bullet.count_appear=0
     if op.x<=0:
       op.y=randrange(10,480,4)
@@ -124,16 +167,18 @@ def main_window():#window
     if bouncing_bullet.y>=500:
       bouncing_bullet.down=False
       bouncing_bullet.up=True
-    
+
     #controls auto
     
     players.draw_player()
     op.draw_ex()
     if bouncing_bullet.count_appear>=5:
       bouncing_bullet.draw_bouncy()
-      bouncing_bullet.x-=op.speed
+      bouncing_bullet.x-=bouncing_bullet.speed
     #font: point
-    points=fonts.render("Point: "+str(players.point),True,blue)
+    points=fonts.render("P1 Point: "+str(players.point),True,blue)
+    pointp2=fonts.render("P2 point: "+str(players.point2),True,blue)
+    total=fonts.render("Total: "+str(players.point+players.point2),True,white)
     
     #font: health
     if players.hp<=5 and players.hp>=3:
@@ -144,12 +189,12 @@ def main_window():#window
       life=fonts.render("Health: "+str(players.hp),True,red)
     main.blit(life,(300,30))
     main.blit(points,(20,30))
-
+    main.blit(pointp2,(50,460))
+    main.blit(total,(150,30))
     op.x-=op.speed
-    
     if players.hp<=0:
       lost=font2.render("GAME OVER!",True,red)
-      main.blit(lost,(350,350))
+      main.blit(lost,(50,350))
       done=True
     clock.tick(FPS)
     display.update()
