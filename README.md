@@ -40,7 +40,8 @@ But: The bug:
 
 Enjoy!
 
-Version 0.1.5:
+Download [here](https://github.com/ThanhTails/Paddle-Shield---The-game) (You need IDLE python with PYGAME library).
+Version 0.2:
 -
 
 -Include 1 player vs 1 player:
