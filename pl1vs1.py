@@ -172,12 +172,14 @@ def arena_1_vs_1():
         op.y=randrange(2,490,2)
         players1.point+=1
         bouncy_bullet.count+=1
+        players1.life-=1
     if op.y2<=players2.y+40 and op.y2>=players2.y:
       if op.x2>=players2.x:
         op.x2=340
         op.y2=randrange(2,490,2)
         players2.point+=1
         bouncy_bullet.count2+=1
+        players2.life+=1
     #bouncy bullet touch
     if bouncy_bullet.x<=0:
       bouncy_bullet.x=340
@@ -195,12 +197,14 @@ def arena_1_vs_1():
         bouncy_bullet.y=randrange(2,490,2)
         players1.point+=2
         bouncy_bullet.count=0
+        players1.life+=1
     if bouncy_bullet.y2<=players2.y+40 and bouncy_bullet.y2>=players2.y:
       if bouncy_bullet.x2>=players2.x:
         bouncy_bullet.x2=340
         bouncy_bullet.y2=randrange(2,490,2)
         players2.point+=2
         bouncy_bullet.count2=0
+        players2.life+=1
     #when ?
     if bouncy_bullet.y<=0:
       bouncy_bullet.down=True
@@ -214,6 +218,11 @@ def arena_1_vs_1():
     if bouncy_bullet.y2>=500:
       bouncy_bullet.down2=False
       bouncy_bullet.up2=True
+    #max life
+    if players1.life>=5:
+      players1.life=5
+    if players2.life>=5:
+      players2.life=5
     #health p1
     if players1.life<=5 and players1.life>=3:
       hp1=fonts.render("P1 Hp: "+str(players1.life),True,green)

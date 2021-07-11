@@ -99,6 +99,7 @@ def main_window():#window
         players.point+=1
         op.speed+=0.1
         bouncing_bullet.count_appear+=1
+        players.hp+=1
     if bouncing_bullet.y>=players.y and bouncing_bullet.y<=players.y+40:
       if bouncing_bullet.x<=players.x:
         bouncing_bullet.y=randrange(10,480,4)
@@ -106,6 +107,7 @@ def main_window():#window
         players.point+=2
         bouncing_bullet.speed+=0.1
         bouncing_bullet.count_appear=0
+        players.hp+=1
     if op.x<=0:
       op.y=randrange(10,480,4)
       op.x=width
@@ -124,7 +126,8 @@ def main_window():#window
     if bouncing_bullet.y>=500:
       bouncing_bullet.down=False
       bouncing_bullet.up=True
-    
+    if players.hp>=5:
+      players.hp=5
     #controls auto
     
     players.draw_player()

@@ -70,3 +70,8 @@ Version 0.2:
 -Bug fixed.
 
 -2 players adventure RETURN! (because version 0.1.5 is deleted to fix bug.)
+
+Version 0.2.2:
+-
+
+-Now if you block any bullets, you heal 1 health.

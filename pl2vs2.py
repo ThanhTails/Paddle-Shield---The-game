@@ -234,24 +234,28 @@ def arena_2_vs_2():
         op.y=randrange(2,490,2)
         players1.point+=1
         bouncy_bullet.count+=1
+        players1.life+=1
     if op.y<=players1.y2+40 and op.y>=players1.y2:
       if op.x<=players1.x:
         op.x=340
         op.y=randrange(2,490,2)
         players1.point+=1
         bouncy_bullet.count+=1
+        players1.life+=1
     if op.y2<=players2.y+40 and op.y2>=players2.y:
       if op.x2>=players2.x:
         op.x2=340
         op.y2=randrange(2,490,2)
         players2.point+=1
         bouncy_bullet.count2+=1
+        players2.life+=1
     if op.y2<=players2.y2+40 and op.y2>=players2.y2:
       if op.x2>=players2.x:
         op.x2=340
         op.y2=randrange(2,490,2)
         players2.point+=1
         bouncy_bullet.count2+=1
+        players2.life+=1
     #bouncy dude
     if bouncy_bullet.x<=0:
       bouncy_bullet.x=340
@@ -269,25 +273,33 @@ def arena_2_vs_2():
         bouncy_bullet.y=randrange(2,490,2)
         players1.point+=1
         bouncy_bullet.count=0
+        players1.life+=1
     if bouncy_bullet.y2<=players2.y+40 and bouncy_bullet.y2>=players2.y:
       if bouncy_bullet.x2>=players2.x:
         bouncy_bullet.x2=340
         bouncy_bullet.y2=randrange(2,490,2)
         players2.point+=1
         bouncy_bullet.count=0
+        players1.life+=1
     if bouncy_bullet.y<=players1.y2+40 and bouncy_bullet.y>=players1.y2:
       if bouncy_bullet.x<=players1.x:
         bouncy_bullet.x=340
         bouncy_bullet.y=randrange(2,490,2)
         players1.point+=1
         bouncy_bullet.count2=0
+        players2.life+=1
     if bouncy_bullet.y2<=players2.y2+40 and bouncy_bullet.y2>=players2.y2:
       if bouncy_bullet.x2>=players2.x:
         bouncy_bullet.x2=340
         bouncy_bullet.y2=randrange(2,490,2)
         players2.point+=1
         bouncy_bullet.count2=0
-
+        players2.life+=1
+    #max life
+    if players1.life>=5:
+      players1.life=5
+    if players2.life>=5:
+      players2.life=5
     #when ?
     if bouncy_bullet.y<=0:
       bouncy_bullet.down=True

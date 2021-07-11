@@ -6,7 +6,7 @@ def main_menu():
   global win
   win=Tk()
   win.title("Paddle shield")
-  win.geometry("600x700")
+  win.geometry("600x400")
   t=Label(win,text="PADDLE SHIELD GAME",font=("Arial",30,"normal"))
   t.grid(row=0,column=0)
   a=Button(win,text="1 player",font=("Arial",20,"normal"),bg="red",command=open_1_player)
