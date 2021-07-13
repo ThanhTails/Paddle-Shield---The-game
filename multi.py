@@ -18,6 +18,7 @@ blue=(0,0,255)
 orange=(255,140,0)
 white=(255,255,255)
 deepink=(255,20,147)
+pink=(255,192,203)
 class player():
   def __init__(self):
     self.x=width-680
@@ -78,9 +79,28 @@ class bounce_op():
       self.y-=2
     if self.down:
       self.y+=2
+#danger bullets
+class danger():
+  def __init__(self):
+    #direction
+    self.speed=2
+    #for orange bullets
+    self.x=560
+    self.y=randint(4,690)
+    self.count_orange=0
+
+    #for pink bullets
+    self.x_1=560
+    self.y_1=randint(4,690)
+    self.count_pink=0
+  def draw_danger_orange(self):
+    draw.rect(main,orange,(self.x,self.y,20,20))
+  def draw_danger_pink(self):
+    draw.rect(main,pink,(self.x_1,self.y_1,20,20))
 players=player()
 op=opponent()
 bouncing_bullet=bounce_op()
+caution=danger()
 def main_window():#window
   done=False
   global main
@@ -131,6 +151,9 @@ def main_window():#window
         op.speed+=0.1
         bouncing_bullet.speed+=0.1
         players.hp+=1
+        caution.count_orange+=1
+        caution.count_pink+=1
+        bouncing_bullet.count_appear+=1
     if bouncing_bullet.y>=players.y and bouncing_bullet.y<=players.y+40:
       if bouncing_bullet.x<=players.x:
         bouncing_bullet.y=randrange(10,480,4)
@@ -138,6 +161,8 @@ def main_window():#window
         players.point+=2
         bouncing_bullet.count_appear=0
         players.hp+=1
+        caution.count_orange+=1
+        caution.count_pink+=1
     #for player 2
     if op.y>=players.y2 and op.y<=players.y2+40:
       if op.x<=players.x2:
@@ -147,6 +172,9 @@ def main_window():#window
         op.speed+=0.1
         bouncing_bullet.speed+=0.1
         players.hp+=1
+        caution.count_orange+=1
+        caution.count_pink+=1
+        bouncing_bullet.count_appear+=1
     if bouncing_bullet.y>=players.y and bouncing_bullet.y<=players.y+40:
       if bouncing_bullet.x<=players.x:
         bouncing_bullet.y=randrange(10,480,4)
@@ -154,26 +182,30 @@ def main_window():#window
         players.point+=2
         bouncing_bullet.count_appear=0
         players.hp+=1
+        caution.count_orange+=1
+        caution.count_pink+=1
     if op.x<=0:
       op.y=randrange(10,480,4)
       op.x=width
       players.hp-=1
       op.speed+=0.1
       bouncing_bullet.count_appear+=1
+      caution.count_orange+=1
+      caution.count_pink+=1
     if bouncing_bullet.x<=0:
       bouncing_bullet.x=width
       bouncing_bullet.y=randrange(10,484,4)
       players.hp-=1
       bouncing_bullet.speed+=0.1
       bouncing_bullet.count_appear=0
+      caution.count_orange+=1
+      caution.count_pink+=1
     if bouncing_bullet.y<=0:
       bouncing_bullet.down=True
       bouncing_bullet.up=False
     if bouncing_bullet.y>=500:
       bouncing_bullet.down=False
       bouncing_bullet.up=True
-    if players.hp>=5:
-      players.hp=5
     #controls auto
     
     players.draw_player()
@@ -181,13 +213,45 @@ def main_window():#window
     if bouncing_bullet.count_appear>=5:
       bouncing_bullet.draw_bouncy()
       bouncing_bullet.x-=bouncing_bullet.speed
+    #show danger
+    if caution.count_orange>=9:
+      caution.draw_danger_orange()
+      caution.x-=caution.speed
+      if caution.x<=0:
+        caution.x=730
+        caution.y=randint(4,696)
+        caution.count_orange=0
+        players.hp-=8
+        caution.speed+=1
+      if caution.y>=players.y and caution.y<=players.y+40 or caution.y>=players.y2 and caution.y<=players.y2+40:
+        if caution.x<=players.x:
+          caution.x=730
+          caution.y=randint(4,696)
+          caution.count_orange=0
+          players.hp+=1
+          caution.speed+=1
+    if caution.count_pink>=7:
+      caution.draw_danger_pink()
+      caution.x_1-=op.speed+2
+      if caution.x_1<=0:
+        caution.y_1=randint(4,696)
+        caution.x_1=730
+        caution.count_pink=0
+        caution.speed+=1
+      if caution.y_1>=players.y and caution.y_1<=players.y+40 or caution.y_1>=players.y2 and caution.y_1<=players.y2+40:
+        if caution.x_1<=players.x:
+          caution.x_1=730
+          caution.y_1=randint(4,696)
+          caution.count_pink=0
+          players.hp-=1
+          caution.speed+=1
     #font: point
-    points=fonts.render("P1 Point: "+str(players.point),True,blue)
-    pointp2=fonts.render("P2 point: "+str(players.point2),True,blue)
+    points=fonts.render("P1 Point: "+str(players.point),True,red)
+    pointp2=fonts.render("P2 point: "+str(players.point2),True,orange)
     total=fonts.render("Total: "+str(players.point+players.point2),True,white)
     
     #font: health
-    if players.hp<=5 and players.hp>=3:
+    if players.hp>=3:
       life=fonts.render("Health: "+str(players.hp),True,green)
     if players.hp==2:
       life=fonts.render("Health: "+str(players.hp),True,yellow)

@@ -15,15 +15,15 @@ green=(0,255,0)
 yellow=(255,255,0)
 black=(0,0,0)
 blue=(0,0,255)
-
-
+pink=(255,192,203)
+orange=(255,127,80)
 class player():
   def __init__(self):
     self.x=width-680
     self.y=250
     self.point=0
     self.y_top=self.y-10
-    self.hp=5
+    self.hp=6
     self.up=False
     self.down=False
     self.stay=True
@@ -62,9 +62,28 @@ class bounce_op():
       self.y-=2
     if self.down:
       self.y+=2
+#danger bullets
+class danger():
+  def __init__(self):
+    #direction
+    #for orange bullets
+    self.x=560
+    self.y=randint(4,690)
+    self.count_orange=0
+
+    #for pink bullets
+    self.x_1=560
+    self.y_1=randint(4,690)
+    self.count_pink=0
+  def draw_danger_orange(self):
+    draw.rect(main,orange,(self.x,self.y,20,20))
+  def draw_danger_pink(self):
+    draw.rect(main,pink,(self.x_1,self.y_1,20,20))
+
 players=player()
 op=opponent()
 bouncing_bullet=bounce_op()
+caution=danger()
 def main_window():#window
   done=False
   global main
@@ -100,6 +119,9 @@ def main_window():#window
         op.speed+=0.1
         bouncing_bullet.count_appear+=1
         players.hp+=1
+        #danger
+        caution.count_orange+=1
+        caution.count_pink+=1
     if bouncing_bullet.y>=players.y and bouncing_bullet.y<=players.y+40:
       if bouncing_bullet.x<=players.x:
         bouncing_bullet.y=randrange(10,480,4)
@@ -107,6 +129,8 @@ def main_window():#window
         players.point+=2
         bouncing_bullet.speed+=0.1
         bouncing_bullet.count_appear=0
+        caution.count_orange+=1
+        caution.count_pink+=1
         players.hp+=1
     if op.x<=0:
       op.y=randrange(10,480,4)
@@ -114,20 +138,22 @@ def main_window():#window
       players.hp-=1
       op.speed+=0.1
       bouncing_bullet.count_appear+=1
+      caution.count_orange+=1
+      caution.count_pink+=1
     if bouncing_bullet.x<=0:
       bouncing_bullet.x=width
       bouncing_bullet.y=randrange(10,484,4)
       players.hp-=1
       bouncing_bullet.speed+=0.1
       bouncing_bullet.count_appear=0
+      caution.count_orange+=1
+      caution.count_pink+=1
     if bouncing_bullet.y<=0:
       bouncing_bullet.down=True
       bouncing_bullet.up=False
     if bouncing_bullet.y>=500:
       bouncing_bullet.down=False
       bouncing_bullet.up=True
-    if players.hp>=5:
-      players.hp=5
     #controls auto
     
     players.draw_player()
@@ -135,16 +161,45 @@ def main_window():#window
     if bouncing_bullet.count_appear>=5:
       bouncing_bullet.draw_bouncy()
       bouncing_bullet.x-=op.speed
+
+    #show danger
+    if caution.count_orange>=9:
+      caution.draw_danger_orange()
+      caution.x-=op.speed+2
+      if caution.x<=0:
+        caution.x=730
+        caution.y=randint(4,696)
+        caution.count_orange=0
+        players.hp-=8
+      if caution.y>=players.y and caution.y<=players.y+40:
+        if caution.x<=players.x:
+          caution.x=730
+          caution.y=randint(4,696)
+          caution.count_orange=0
+          players.hp+=1
+    if caution.count_pink>=7:
+      caution.draw_danger_pink()
+      caution.x_1-=op.speed+2
+      if caution.x_1<=0:
+        caution.y_1=randint(4,696)
+        caution.x_1=730
+        caution.count_pink=0
+      if caution.y_1>=players.y and caution.y_1<=players.y+40:
+        if caution.x_1<=players.x:
+          caution.x_1=730
+          caution.y_1=randint(4,696)
+          caution.count_pink=0
+          players.hp-=1
     #font: point
     points=fonts.render("Point: "+str(players.point),True,blue)
     
     #font: health
-    if players.hp<=5 and players.hp>=3:
-      life=fonts.render("Health: "+str(players.hp),True,green)
+    if players.hp>=3:
+      life=fonts.render("Health: "+str(int(players.hp)),True,green)
     if players.hp==2:
-      life=fonts.render("Health: "+str(players.hp),True,yellow)
+      life=fonts.render("Health: "+str(int(players.hp)),True,yellow)
     if players.hp==1:
-      life=fonts.render("Health: "+str(players.hp),True,red)
+      life=fonts.render("Health: "+str(int(players.hp)),True,red)
     main.blit(life,(300,30))
     main.blit(points,(20,30))
 

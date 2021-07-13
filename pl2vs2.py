@@ -17,6 +17,7 @@ yellow=(255,255,0)
 white=(255,255,255)
 deepink=(255,20,147)
 deepviolet=(148,0,211)
+pink=(255,192,203)
 #Font
 fonts=font.Font("freesansbold.ttf",10)
 font2=font.Font("freesansbold.ttf",30)
@@ -34,7 +35,7 @@ class team1():
     self.down2=False
     self.stay2=True
     self.point=0
-    self.life=5
+    self.life=6
   def draw_p1_team1(self):
     draw.rect(main,red,(self.x,self.y,20,40))
     if self.up:
@@ -68,7 +69,7 @@ class team2():
     self.down2=False
     self.stay2=True
     self.point=0
-    self.life=5
+    self.life=6
   def draw_p1_team2(self):
     draw.rect(main,orange,(self.x,self.y,20,40))
     if self.up:
@@ -80,7 +81,7 @@ class team2():
     if self.y>=460:
       self.y=460
   def draw_p2_team2(self):
-    draw.rect(main,orange,(self.x2,self.y2,20,40))
+    draw.rect(main,blue,(self.x2,self.y2,20,40))
     if self.up2:
       self.y2-=4
     if self.down2:
@@ -124,11 +125,50 @@ class bounce_op():
       self.y2-=2
     if self.down2:
       self.y2+=2
+
+#danger
+#for team 1
+class danger1():
+  def __init__(self):
+    #direction
+    #for orange bullets
+    self.x=340
+    self.y=randint(4,690)
+    self.count_orange=0
+
+    #for pink bullets
+    self.x_1=340
+    self.y_1=randint(4,690)
+    self.count_pink=0
+  def draw_danger_orange(self):
+    draw.rect(main,orange,(self.x,self.y,20,20))
+  def draw_danger_pink(self):
+    draw.rect(main,pink,(self.x_1,self.y_1,20,20))
+#for team 2
+class danger2():
+  def __init__(self):
+    #direction
+    #for orange bullets
+    self.x=360
+    self.y=randint(4,690)
+    self.count_orange=0
+
+    #for pink bullets
+    self.x_1=360
+    self.y_1=randint(4,690)
+    self.count_pink=0
+  def draw_danger_orange(self):
+    draw.rect(main,orange,(self.x,self.y,20,20))
+  def draw_danger_pink(self):
+    draw.rect(main,pink,(self.x_1,self.y_1,20,20))
 def arena_2_vs_2():
+  global main
   players1=team1()
   players2=team2()
   op=opponent()
   bouncy_bullet=bounce_op()
+  caution1=danger1()
+  caution2=danger2()
   done=False
   main=display.set_mode((width,height))
   display.set_caption("1 vs 1")
@@ -211,8 +251,89 @@ def arena_2_vs_2():
       bouncy_bullet.draw_bouncy()
       bouncy_bullet.x-=1
     if bouncy_bullet.count2>=5:
-      bouncy_bullet.draw_bouncy()
+      bouncy_bullet.draw_bouncy2()
       bouncy_bullet.x2+=1
+    #caution!
+    #p1
+    if caution1.count_orange>=9:
+      caution1.draw_danger_orange()
+      caution1.x-=2
+      if caution1.y>=players1.y and caution1.y<=players1.y+40:
+        if caution1.x<=players1.x:
+          caution1.x=340
+          caution1.y=randint(2,698)
+          players1.life+=1
+          caution1.count_orange=0
+      if caution1.y>=players1.y2 and caution1.y<=players1.y2+40:
+        if caution1.x<=players1.x2:
+          caution1.x=340
+          caution1.y=randint(2,698)
+          players1.life+=1
+          caution1.count_orange=0
+      if caution1.x<=0:
+        caution1.x=340
+        caution1.y=randint(2,698)
+        players1.life-=8
+        caution1.count_orange=0
+    if caution1.count_pink>=7:
+      caution1.draw_danger_pink()
+      caution1.x_1-=2
+      if caution1.y_1>=players1.y and caution1.y_1<=players1.y+40:
+        if caution1.x_1<=players1.x:
+          caution1.x_1=340
+          caution1.y_1=randint(2,698)
+          caution1.count_pink=0
+          players1.life-=1
+      if caution1.y_1>=players1.y2 and caution1.y_1<=players1.y2+40:
+        if caution1.x_1<=players1.x2:
+          caution1.x_1=340
+          caution1.y_1=randint(2,698)
+          caution1.count_pink=0
+          players1.life-=1
+      if caution1.x_1<=0:
+        caution1.x_1=340
+        caution1.y_1=randint(2,698) 
+        caution1.count_pink=0
+    #p2
+    if caution2.count_orange>=9:
+      caution2.draw_danger_orange()
+      caution2.x+=2
+      if caution2.y>=players2.y and caution2.y<=players2.y+40:
+        if caution2.x<=players2.x:
+          caution2.x=360
+          caution2.y=randint(2,698)
+          players2.life+=1
+          caution2.count_orange=0
+      if caution2.y>=players2.y2 and caution2.y<=players2.y2+40:
+        if caution2.x<=players2.x2:
+          caution2.x=360
+          caution2.y=randint(2,698)
+          players2.life+=1
+          caution2.count_orange=0
+      if caution2.x<=0:
+        caution2.x=360
+        caution2.y=randint(2,698)
+        players2.life-=8
+        caution2.count_orange=0
+    if caution2.count_pink>=7:
+      caution2.draw_danger_pink()
+      caution2.x_1+=2
+      if caution2.y_1>=players2.y and caution1.y_1<=players2.y+40:
+        if caution2.x_1<=players2.x:
+          caution2.x_1=360
+          caution2.y_1=randint(2,698)
+          caution2.count_pink=0
+          players2.life-=1
+      if caution2.y_1>=players2.y2 and caution1.y_1<=players2.y2+40:
+        if caution2.x_1<=players2.x2:
+          caution2.x_1=360
+          caution2.y_1=randint(2,698)
+          caution2.count_pink=0
+          players2.life-=1
+      if caution1.x_1<=0:
+        caution1.x_1=360
+        caution1.y_1=randint(2,698)
+        caution2.count_pink=0
     op.x-=2
     op.x2+=2
     
@@ -223,11 +344,15 @@ def arena_2_vs_2():
       op.y=randrange(2,490,2)
       players1.life-=1
       bouncy_bullet.count+=1
+      caution1.count_orange+=1
+      caution1.count_pink+=1
     if op.x2>=700:
       op.x2=360
       op.y2=randrange(2,490,2)
       players2.life-=1
       bouncy_bullet.count2+=1
+      caution2.count_orange+=1
+      caution2.count_pink+=1
     if op.y<=players1.y+40 and op.y>=players1.y:
       if op.x<=players1.x:
         op.x=340
@@ -235,6 +360,8 @@ def arena_2_vs_2():
         players1.point+=1
         bouncy_bullet.count+=1
         players1.life+=1
+        caution1.count_orange+=1
+        caution1.count_pink+=1
     if op.y<=players1.y2+40 and op.y>=players1.y2:
       if op.x<=players1.x:
         op.x=340
@@ -242,6 +369,8 @@ def arena_2_vs_2():
         players1.point+=1
         bouncy_bullet.count+=1
         players1.life+=1
+        caution1.count_orange+=1
+        caution1.count_pink+=1
     if op.y2<=players2.y+40 and op.y2>=players2.y:
       if op.x2>=players2.x:
         op.x2=340
@@ -249,6 +378,8 @@ def arena_2_vs_2():
         players2.point+=1
         bouncy_bullet.count2+=1
         players2.life+=1
+        caution2.count_orange+=1
+        caution2.count_pink+=1
     if op.y2<=players2.y2+40 and op.y2>=players2.y2:
       if op.x2>=players2.x:
         op.x2=340
@@ -256,17 +387,23 @@ def arena_2_vs_2():
         players2.point+=1
         bouncy_bullet.count2+=1
         players2.life+=1
+        caution2.count_orange+=1
+        caution2.count_pink+=1
     #bouncy dude
     if bouncy_bullet.x<=0:
       bouncy_bullet.x=340
       bouncy_bullet.y=randrange(10,484,4)
       players1.life-=1
       bouncy_bullet.count=0
+      caution1.count_orange+=1
+      caution1.count_pink+=1
     if bouncy_bullet.x2>=700:
       bouncy_bullet.x2=360
       bouncy_bullet.y2=randrange(10,484,4)
       players2.life-=1
       bouncy_bullet.count2=0
+      caution2.count_orange+=1
+      caution2.count_pink+=1
     if bouncy_bullet.y<=players1.y+40 and bouncy_bullet.y>=players1.y:
       if bouncy_bullet.x<=players1.x:
         bouncy_bullet.x=340
@@ -274,6 +411,8 @@ def arena_2_vs_2():
         players1.point+=1
         bouncy_bullet.count=0
         players1.life+=1
+        caution1.count_orange+=1
+        caution1.count_pink+=1
     if bouncy_bullet.y2<=players2.y+40 and bouncy_bullet.y2>=players2.y:
       if bouncy_bullet.x2>=players2.x:
         bouncy_bullet.x2=340
@@ -281,6 +420,8 @@ def arena_2_vs_2():
         players2.point+=1
         bouncy_bullet.count=0
         players1.life+=1
+        caution2.count_orange+=1
+        caution2.count_pink+=1
     if bouncy_bullet.y<=players1.y2+40 and bouncy_bullet.y>=players1.y2:
       if bouncy_bullet.x<=players1.x:
         bouncy_bullet.x=340
@@ -288,6 +429,8 @@ def arena_2_vs_2():
         players1.point+=1
         bouncy_bullet.count2=0
         players2.life+=1
+        caution1.count_orange+=1
+        caution1.count_pink+=1
     if bouncy_bullet.y2<=players2.y2+40 and bouncy_bullet.y2>=players2.y2:
       if bouncy_bullet.x2>=players2.x:
         bouncy_bullet.x2=340
@@ -295,11 +438,8 @@ def arena_2_vs_2():
         players2.point+=1
         bouncy_bullet.count2=0
         players2.life+=1
-    #max life
-    if players1.life>=5:
-      players1.life=5
-    if players2.life>=5:
-      players2.life=5
+        caution2.count_orange+=1
+        caution2.count_pink+=1
     #when ?
     if bouncy_bullet.y<=0:
       bouncy_bullet.down=True
@@ -318,14 +458,14 @@ def arena_2_vs_2():
     pointp2=fonts.render("Team 2 point: "+str(players2.point),True,white)#p2
     #life
     #health p1
-    if players1.life<=5 and players1.life>=3:
+    if players1.life>=3:
       hp1=fonts.render("Team 1 Hp: "+str(players1.life),True,green)
     if players1.life==2:
       hp1=fonts.render("Team 1 Hp: "+str(players1.life),True,yellow)
     if players1.life==1:
-      hp1=fonts.render(" Team1 Hp: "+str(players1.life),True,red)
+      hp1=fonts.render("Team 1 Hp: "+str(players1.life),True,red)
     #health p2
-    if players2.life<=5 and players2.life>=3:
+    if players2.life>=3:
       hp2=fonts.render("Team 2 Hp: "+str(players2.life),True,green)
     if players2.life==2:
       hp2=fonts.render("Team 2 Hp: "+str(players2.life),True,yellow)
@@ -343,7 +483,7 @@ def arena_2_vs_2():
     if players2.life<=0:
       ans=font2.render("Team 1 win",True,green) 
       main.blit(ans,(250,250)) 
-      done=True 
+      done=True
     clock.tick(FPS)
     display.update()
   tm.sleep(3)

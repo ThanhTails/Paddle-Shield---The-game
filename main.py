@@ -20,7 +20,7 @@ def main_menu():
   #another
   v1=Button(win,text="1 vs 1 (PVP)",font=("Arial",20,"normal"),bg="red",command=open_1_v_1)
   v1.grid(row=3,column=0)
-  ver=Label(win,text="Version 0.2 DEMO")
+  ver=Label(win,text="Version 0.2.2 DEMO")
   ver.grid(row=9,column=0)
   cre=Label(win,text="®2021 ThanhTails")
   cre.grid(row=10,column=0)
