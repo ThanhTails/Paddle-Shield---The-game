@@ -98,3 +98,7 @@ Few Bug fixed.
 Change colors of paddles
 
 Time limit: Up to 500.
+
+Version 0.2.3:
+-
+
